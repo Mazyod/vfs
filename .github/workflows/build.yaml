@@ -13,3 +13,10 @@ jobs:
 
     - name: Build
       run: make
+
+    - name: 'Upload artifacts'
+      uses: actions/upload-artifact@v2
+      with:
+        name: app
+        path: vfs
+        retention-days: 15
