@@ -1,0 +1,15 @@
+name: Build the binary
+
+on: [push]
+
+jobs:
+  build_app:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup
+      run: cmake .
+
+    - name: Build
+      run: make
