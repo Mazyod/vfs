@@ -4,14 +4,14 @@
 
 std::string ltrim(std::string s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(),
-                                    std::not1(std::ptr_fun<int, int>(std::isspace))));
+                                    [](int c) { return !std::isspace(c); }));
     return s;
 }
 
 // trim from end
 std::string rtrim(std::string s) {
     s.erase(std::find_if(s.rbegin(), s.rend(),
-                         std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+                         [](int c) { return !std::isspace(c); }).base(), s.end());
     return s;
 }
 
@@ -38,10 +38,10 @@ size_t split(const std::string &txt, std::vector<std::string> &strs, char ch) {
     return strs.size();
 }
 
-enum NodeType{
+enum NodeType {
     file,
     directory
-};
+};;
 
 class TreeNode {
 public:
@@ -56,9 +56,48 @@ public:
         this->nodeType = directory;
     }
 
+    TreeNode(std::string name) {
+        this->name = name;
+    }
+
     std::string getName() {
         return name;
     }
+
+    void create_dir(std::vector<std::string> *paths) {
+        while (!paths->empty()) {
+            auto currentPath = paths->begin();
+            TreeNode treeNode(*currentPath);
+            auto child = std::find_if(this->children.begin(), this->children.end(),
+                                      [&currentPath](TreeNode c) { return c.name == *currentPath; });
+
+            paths->erase(paths->begin(), paths->begin() + 1);
+            if (child == this->children.end()) {
+                std::cout << treeNode.name << " final directory created" << std::endl;
+                treeNode.create_dir(paths);
+                this->children.push_back(treeNode);
+            } else {
+                (*child).create_dir(paths);
+            }
+        }
+    }
+};
+
+
+class Tree {
+public:
+    TreeNode root;
+
+    Tree(TreeNode root) {
+        this->root = root;
+    }
+
+    void addPath(std::string path) {
+        std::vector<std::string> pathVector;
+        split(path, pathVector, '/');
+        this->root.create_dir(&pathVector);
+    }
+
 };
 
 struct ParsedCommand {
@@ -82,7 +121,6 @@ public:
 
 bool validate_mkdir(ParsedCommand basicString);
 
-bool create_dir(std::string path);
 
 bool validate_touch(ParsedCommand command);
 
@@ -95,7 +133,8 @@ bool find_path(std::string path);
 int main() {
     std::string commandString;
     std::cout << "Supported commands: mkdir, touch, find, exit" << std::endl;
-    TreeNode file_system;
+    TreeNode treeNode;
+    Tree file_system(treeNode);
     do {
         std::cout << "Command: ";
         std::getline(std::cin, commandString);
@@ -106,10 +145,7 @@ int main() {
         if (parsedCommand.command == "mkdir") {
             bool valid = validate_mkdir(parsedCommand);
             if (valid) {
-                bool created = create_dir("test");
-                if (created) {
-                    std::cout << commandString << " has been created" << std::endl;
-                }
+                file_system.addPath(parsedCommand.args.at(0));
             } else {
                 std::cout << "mkdir: command not entered correctly" << std::endl;
             }
@@ -160,10 +196,6 @@ bool touch_file(std::string path) {
 
 bool validate_touch(ParsedCommand command) {
     return command.command == "touch" and command.args.size() == 1;
-}
-
-bool create_dir(std::string path) {
-
 }
 
 bool validate_mkdir(ParsedCommand command) {
