@@ -71,6 +71,11 @@ public:
                 treeNode.create_dir(paths);
                 this->children.push_back(treeNode);
             } else {
+                if(child->nodeType == file){
+                    std::cout << "Invalid: Cannot create " << paths->back() << " under the file " << child->name << std::endl;
+                    paths->erase(paths->begin(), paths->end());
+                    return;
+                }
                 (*child).create_dir(paths);
             }
         }
