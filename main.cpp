@@ -46,18 +46,12 @@ enum NodeType {
 class TreeNode {
 public:
     std::string name;
-    int level;
     NodeType nodeType;
     std::vector<TreeNode> children;
 
-    TreeNode() {
-        this->name = "";
-        this->level = 0;
-        this->nodeType = directory;
-    }
-
     TreeNode(std::string name) {
         this->name = name;
+        this->nodeType = directory;
     }
 
     std::string getName() {
@@ -73,7 +67,7 @@ public:
 
             paths->erase(paths->begin(), paths->begin() + 1);
             if (child == this->children.end()) {
-                std::cout << treeNode.name << " final directory created" << std::endl;
+                std::cout << treeNode.name << " directory created" << std::endl;
                 treeNode.create_dir(paths);
                 this->children.push_back(treeNode);
             } else {
@@ -88,7 +82,7 @@ class Tree {
 public:
     TreeNode root;
 
-    Tree(TreeNode root) {
+    Tree(TreeNode root) : root(root) {
         this->root = root;
     }
 
@@ -96,6 +90,11 @@ public:
         std::vector<std::string> pathVector;
         split(path, pathVector, '/');
         this->root.create_dir(&pathVector);
+    }
+
+
+    void touch_file(std::string path){
+
     }
 
 };
@@ -124,8 +123,6 @@ bool validate_mkdir(ParsedCommand basicString);
 
 bool validate_touch(ParsedCommand command);
 
-bool touch_file(std::string path);
-
 bool validate_find(ParsedCommand path);
 
 bool find_path(std::string path);
@@ -133,7 +130,7 @@ bool find_path(std::string path);
 int main() {
     std::string commandString;
     std::cout << "Supported commands: mkdir, touch, find, exit" << std::endl;
-    TreeNode treeNode;
+    TreeNode treeNode("");
     Tree file_system(treeNode);
     do {
         std::cout << "Command: ";
@@ -153,10 +150,7 @@ int main() {
             bool valid = validate_touch(parsedCommand);
             if (valid) {
                 std::string path = parsedCommand.args.at(0);
-                bool created = touch_file(path);
-                if (created) {
-                    std::cout << path << " has been created" << std::endl;
-                }
+                file_system.touch_file(path);
             } else {
                 std::cout << "Invalid: " << commandString << " does not exist" << std::endl;
             }
@@ -188,10 +182,6 @@ bool find_path(std::string path) {
 
 bool validate_find(ParsedCommand command) {
     return command.command == "find" and (command.args.size() >= 1 or command.args.size() <= 2);
-}
-
-bool touch_file(std::string path) {
-    return true;
 }
 
 bool validate_touch(ParsedCommand command) {
