@@ -49,9 +49,9 @@ public:
     NodeType nodeType;
     std::vector<TreeNode> children;
 
-    TreeNode(std::string name) {
+    TreeNode(std::string name, NodeType nodeType) {
         this->name = name;
-        this->nodeType = directory;
+        this->nodeType = nodeType;
     }
 
     std::string getName() {
@@ -61,7 +61,7 @@ public:
     void create_dir(std::vector<std::string> *paths) {
         while (!paths->empty()) {
             auto currentPath = paths->begin();
-            TreeNode treeNode(*currentPath);
+            TreeNode treeNode(*currentPath, directory);
             auto child = std::find_if(this->children.begin(), this->children.end(),
                                       [&currentPath](TreeNode c) { return c.name == *currentPath; });
 
@@ -72,6 +72,34 @@ public:
                 this->children.push_back(treeNode);
             } else {
                 (*child).create_dir(paths);
+            }
+        }
+    }
+
+    void create_file(std::vector<std::string> *paths) {
+        while (!paths->empty()) {
+            auto currentPath = paths->begin();
+            TreeNode treeNode(*currentPath, file);
+            auto child = std::find_if(this->children.begin(), this->children.end(),
+                                      [&currentPath](TreeNode c) { return c.name == *currentPath; });
+            if (child != this->children.end()) {
+                if (child->nodeType == file) {
+                    std::cout << "Cannot create file " << paths->back() << " under the file " << *currentPath << std::endl;
+                    return;
+                }else{
+                    if(paths->size() == 1){
+                        std::cout << "Cannot create file " << paths->back() << " under the folder with same name " << *currentPath << std::endl;
+                        paths->erase(paths->begin(), paths->end());
+                        return;
+                    }
+                    paths->erase(paths->begin(), paths->begin() + 1);
+                    (*child).create_file(paths);
+                }
+            }else if(paths->size() == 1){
+                std::cout << paths->front() <<" has been created" << std::endl;
+                paths->erase(paths->begin(), paths->end());
+                this->children.push_back(treeNode);
+                return;
             }
         }
     }
@@ -93,8 +121,10 @@ public:
     }
 
 
-    void touch_file(std::string path){
-
+    void touch_file(std::string path) {
+        std::vector<std::string> pathVector;
+        split(path, pathVector, '/');
+        this->root.create_file(&pathVector);
     }
 
 };
@@ -130,7 +160,7 @@ bool find_path(std::string path);
 int main() {
     std::string commandString;
     std::cout << "Supported commands: mkdir, touch, find, exit" << std::endl;
-    TreeNode treeNode("");
+    TreeNode treeNode("", directory);
     Tree file_system(treeNode);
     do {
         std::cout << "Command: ";
@@ -154,7 +184,7 @@ int main() {
             } else {
                 std::cout << "Invalid: " << commandString << " does not exist" << std::endl;
             }
-        } else if (parsedCommand.command == "touch") {
+        } else if (parsedCommand.command == "find") {
             bool valid = validate_find(parsedCommand);
             if (valid) {
                 bool found = find_path(commandString);
