@@ -71,8 +71,9 @@ public:
                 treeNode.create_dir(paths);
                 this->children.push_back(treeNode);
             } else {
-                if(child->nodeType == file){
-                    std::cout << "Invalid: Cannot create " << paths->back() << " under the file " << child->name << std::endl;
+                if (child->nodeType == file) {
+                    std::cout << "Invalid: Cannot create " << paths->back() << " under the file " << child->name
+                              << std::endl;
                     paths->erase(paths->begin(), paths->end());
                     return;
                 }
@@ -89,25 +90,69 @@ public:
                                       [&currentPath](TreeNode c) { return c.name == *currentPath; });
             if (child != this->children.end()) {
                 if (child->nodeType == file) {
-                    std::cout << "Cannot create file " << paths->back() << " under the file " << *currentPath << std::endl;
+                    std::cout << "Cannot create file " << paths->back() << " under the file " << *currentPath
+                              << std::endl;
                     return;
-                }else{
-                    if(paths->size() == 1){
-                        std::cout << "Cannot create file " << paths->back() << " under the folder with same name " << *currentPath << std::endl;
+                } else {
+                    if (paths->size() == 1) {
+                        std::cout << "Cannot create file " << paths->back() << " under the folder with same name "
+                                  << *currentPath << std::endl;
                         paths->erase(paths->begin(), paths->end());
                         return;
                     }
                     paths->erase(paths->begin(), paths->begin() + 1);
                     (*child).create_file(paths);
                 }
-            }else if(paths->size() == 1){
-                std::cout << paths->front() <<" has been created" << std::endl;
+            } else if (paths->size() == 1) {
+                std::cout << paths->front() << " has been created" << std::endl;
                 paths->erase(paths->begin(), paths->end());
                 this->children.push_back(treeNode);
                 return;
             }
         }
     }
+
+    bool find_path(std::string name, TreeNode root, std::vector<std::string> &path) {
+        if (name == root.name) {
+            return true;
+        }
+        for (TreeNode child: root.children) {
+            bool found = find_path(name, child, path);
+            if (found) {
+                path.push_back(child.name);
+                return found;
+            }
+        }
+
+        return !path.empty();
+    }
+
+    bool path_between(std::string first, std::string second, TreeNode root, std::vector<std::string> &path) {
+        std::vector<std::string> pathFirst;
+        bool foundFirst = find_path(first, root, pathFirst);
+        if (!foundFirst) return false;
+
+        std::vector<std::string> pathSecond;
+        auto child = std::find_if(root.children.begin(), root.children.end(),
+                                  [&pathFirst](TreeNode c) { return c.name == pathFirst.back(); });
+        bool foundSecond = find_path(second, *child, pathSecond);
+        if (!foundSecond) return false;
+
+
+        for (auto f = pathFirst.begin(); f != pathFirst.end(); f++) {
+            for (auto p = pathSecond.rbegin(); p != pathSecond.rend(); p++) {
+                if (*f == *p) {
+                    path.insert(path.end(), pathFirst.begin(), f);
+                    path.insert(path.end(), p,pathSecond.rend());
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
+    }
+
 };
 
 
@@ -125,13 +170,47 @@ public:
         this->root.create_dir(&pathVector);
     }
 
-
     void touch_file(std::string path) {
         std::vector<std::string> pathVector;
         split(path, pathVector, '/');
         this->root.create_file(&pathVector);
     }
 
+    void find_path(std::string path) {
+        std::vector<std::string> pathVector;
+        split(path, pathVector, '/');
+        std::vector<std::string> pathV;
+        auto destination = pathVector.back();
+        this->root.find_path(destination, this->root, pathV);
+        if (pathV.empty()) {
+            std::cout << destination << " cannot be found" << std::endl;
+        } else {
+            std::cout << "Found: ";
+            for (auto it = pathV.rbegin(); it != pathV.rend(); ++it) {
+                std::cout << *it;
+                if (it + 1 != pathV.rend()) {
+                    std::cout << " - ";
+                }
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    void find_between_path(std::string first, std::string second) {
+        std::vector<std::string> pathV;
+        this->root.path_between(first, second, this->root, pathV);
+        if (pathV.empty()) {
+            std::cout << "No path can be found between " << first << " and " << second << std::endl;
+        } else {
+            for (auto it = pathV.begin(); it != pathV.end(); ++it) {
+                std::cout << *it;
+                if (it + 1 != pathV.end()) {
+                    std::cout << " - ";
+                }
+            }
+            std::cout << std::endl;
+        }
+    }
 };
 
 struct ParsedCommand {
@@ -155,12 +234,9 @@ public:
 
 bool validate_mkdir(ParsedCommand basicString);
 
-
 bool validate_touch(ParsedCommand command);
 
 bool validate_find(ParsedCommand path);
-
-bool find_path(std::string path);
 
 int main() {
     std::string commandString;
@@ -192,11 +268,13 @@ int main() {
         } else if (parsedCommand.command == "find") {
             bool valid = validate_find(parsedCommand);
             if (valid) {
-                bool found = find_path(commandString);
-                if (found) {
-
+                if (parsedCommand.args.size() == 1) {
+                    std::string path = parsedCommand.args.at(0);
+                    file_system.find_path(path);
                 } else {
-                    std::cout << commandString << " cannot be found" << std::endl;
+                    std::string path1 = parsedCommand.args.at(0);
+                    std::string path2 = parsedCommand.args.at(1);
+                    file_system.find_between_path(path1, path2);
                 }
             }
         } else if (parsedCommand.command == "exit") {
@@ -209,10 +287,6 @@ int main() {
 
 
     return 0;
-}
-
-bool find_path(std::string path) {
-    return true;
 }
 
 bool validate_find(ParsedCommand command) {
