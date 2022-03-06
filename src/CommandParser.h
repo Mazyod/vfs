@@ -16,6 +16,11 @@ struct ParsedCommand {
 
 class CommandParserInterface {
 public:
+    virtual ParsedCommand parseString(std::string line) {}
+};
+
+class CommandParser : public CommandParserInterface {
+public:
     ParsedCommand parseString(std::string line);
 };
 
