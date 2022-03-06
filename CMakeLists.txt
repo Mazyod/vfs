@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.18)
 project(vfs)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(vfs main.cpp include/strings.h)
+add_executable(app main.cpp include/strings.h)
