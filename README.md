@@ -30,3 +30,14 @@ The goal is to ensure the communication flow is in one direction.All class follo
 Interfaces are used to define the boundaries between the different entities.
 
 ![](diagram.jpg)
+
+## Testing
+We use Google Test as the testing library to write unit tests for the project.
+
+### To run the tests
+
+```bash
+cmake -Dtest=ON .
+make
+make test
+```
