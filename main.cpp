@@ -1,9 +1,9 @@
 #include <string>
-#include "src/FileSystem.h"
+#include "src/TreeFileSystem.h"
 #include "src/Application.h"
 
 int main() {
-    FileSystem fileSystem;
+    TreeFileSystem fileSystem;
 
     Application application(fileSystem);
     application.run();

@@ -2,8 +2,8 @@
 // Created by suraj on 3/6/22.
 //
 
-#ifndef VFS_FILESYSTEM_H
-#define VFS_FILESYSTEM_H
+#ifndef VFS_TREEFILESYSTEM_H
+#define VFS_TREEFILESYSTEM_H
 
 #include<string>
 #include<vector>
@@ -35,10 +35,6 @@ public:
     TreeNode(std::string name, NodeType nodeType) {
         this->name = name;
         this->nodeType = nodeType;
-    }
-
-    std::string getName() {
-        return name;
     }
 
     void create_dir(std::vector<std::string> *paths) {
@@ -139,11 +135,11 @@ public:
 };
 
 
-class FileSystem : public FileSystemInterface {
+class TreeFileSystem : public FileSystemInterface {
     TreeNode root;
 public:
 
-    FileSystem() : root(TreeNode("", directory)) {}
+    TreeFileSystem() : root(TreeNode("", directory)) {}
 
     void addPath(std::string path);
 
@@ -156,4 +152,4 @@ public:
 };
 
 
-#endif //VFS_FILESYSTEM_H
+#endif //VFS_TREEFILESYSTEM_H

@@ -2,21 +2,21 @@
 // Created by suraj on 3/6/22.
 //
 
-#include "FileSystem.h"
+#include "TreeFileSystem.h"
 
-void FileSystem::addPath(std::string path) {
+void TreeFileSystem::addPath(std::string path) {
     std::vector<std::string> pathVector;
     split(path, pathVector, '/');
     this->root.create_dir(&pathVector);
 }
 
-void FileSystem::touch_file(std::string path) {
+void TreeFileSystem::touch_file(std::string path) {
     std::vector<std::string> pathVector;
     split(path, pathVector, '/');
     this->root.create_file(&pathVector);
 }
 
-void FileSystem::find_path(std::string path) {
+void TreeFileSystem::find_path(std::string path) {
     std::vector<std::string> pathVector;
     split(path, pathVector, '/');
     std::vector<std::string> pathV;
@@ -36,7 +36,7 @@ void FileSystem::find_path(std::string path) {
     }
 }
 
-void FileSystem::find_between_path(std::string first, std::string second) {
+void TreeFileSystem::find_between_path(std::string first, std::string second) {
     std::vector<std::string> pathV;
     this->root.path_between(first, second, this->root, pathV);
     if (pathV.empty()) {

@@ -6,7 +6,7 @@
 #define VFS_FILESYSTEMOPERATIONS_H
 
 #include "CommandlineParser.h"
-#include "FileSystem.h"
+#include "TreeFileSystem.h"
 
 #define OPERATION_SUCCESSFUL 0;
 #define OPERATION_EXIT 1;

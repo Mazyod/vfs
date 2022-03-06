@@ -5,7 +5,7 @@
 #ifndef VFS_APPLICATION_H
 #define VFS_APPLICATION_H
 
-#include "FileSystem.h"
+#include "TreeFileSystem.h"
 #include "FileSystemOperations.h"
 #include "CommandlineParser.h"
 
