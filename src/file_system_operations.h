@@ -2,11 +2,11 @@
 // Created by suraj on 3/6/22.
 //
 
-#ifndef VFS_FILESYSTEMOPERATIONS_H
-#define VFS_FILESYSTEMOPERATIONS_H
+#ifndef VFS_FILE_SYSTEM_OPERATIONS_H
+#define VFS_FILE_SYSTEM_OPERATIONS_H
 
-#include "CommandlineParser.h"
-#include "TreeFileSystem.h"
+#include "commandline_parser.h"
+#include "tree_file_system.h"
 
 #define OPERATION_SUCCESSFUL 0;
 #define OPERATION_EXIT 1;
@@ -59,4 +59,4 @@ public:
     }
 };
 
-#endif //VFS_FILESYSTEMOPERATIONS_H
+#endif //VFS_FILE_SYSTEM_OPERATIONS_H

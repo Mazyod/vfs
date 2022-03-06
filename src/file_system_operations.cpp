@@ -2,7 +2,7 @@
 // Created by suraj on 3/6/22.
 //
 
-#include "FileSystemOperations.h"
+#include "file_system_operations.h"
 
 int MakeDirectoryOperation::execute(ParsedCommand parsedCommand, FileSystemInterface *file_system) {
     bool valid = validate(parsedCommand);

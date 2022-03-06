@@ -2,7 +2,7 @@
 // Created by suraj on 3/6/22.
 //
 
-#include "TreeFileSystem.h"
+#include "tree_file_system.h"
 
 void TreeFileSystem::addPath(std::string path) {
     std::vector<std::string> pathVector;

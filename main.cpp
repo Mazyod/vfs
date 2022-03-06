@@ -1,6 +1,6 @@
 #include <string>
-#include "src/TreeFileSystem.h"
-#include "src/Application.h"
+#include "src/tree_file_system.h"
+#include "src/application.h"
 
 int main() {
     TreeFileSystem fileSystem;

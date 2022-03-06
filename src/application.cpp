@@ -1,7 +1,7 @@
 //
 // Created by suraj on 3/6/22.
 //
-#include "Application.h"
+#include "application.h"
 
 void Application::setOperation(ParsedCommand parsedCommand) {
     if (parsedCommand.command == "mkdir") {

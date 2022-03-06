@@ -5,9 +5,9 @@
 #ifndef VFS_APPLICATION_H
 #define VFS_APPLICATION_H
 
-#include "TreeFileSystem.h"
-#include "FileSystemOperations.h"
-#include "CommandlineParser.h"
+#include "tree_file_system.h"
+#include "file_system_operations.h"
+#include "commandline_parser.h"
 
 class Application {
     FileSystemInterface *file_system;

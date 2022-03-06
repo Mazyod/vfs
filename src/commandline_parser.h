@@ -1,8 +1,8 @@
 //
 // Created by suraj on 3/6/22.
 //
-#ifndef VFS_COMMANDLINEPARSER_H
-#define VFS_COMMANDLINEPARSER_H
+#ifndef VFS_COMMANDLINE_PARSER_H
+#define VFS_COMMANDLINE_PARSER_H
 
 
 #include "../include/strings.h"
@@ -27,4 +27,4 @@ public:
     ParsedCommand parseString(std::string line);
 };
 
-#endif //VFS_COMMANDLINEPARSER_H
+#endif //VFS_COMMANDLINE_PARSER_H

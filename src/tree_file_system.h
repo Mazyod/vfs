@@ -2,8 +2,8 @@
 // Created by suraj on 3/6/22.
 //
 
-#ifndef VFS_TREEFILESYSTEM_H
-#define VFS_TREEFILESYSTEM_H
+#ifndef VFS_TREE_FILE_SYSTEM_H
+#define VFS_TREE_FILE_SYSTEM_H
 
 #include<string>
 #include<vector>
@@ -138,4 +138,4 @@ public:
 };
 
 
-#endif //VFS_TREEFILESYSTEM_H
+#endif //VFS_TREE_FILE_SYSTEM_H
