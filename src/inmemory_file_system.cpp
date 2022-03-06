@@ -13,20 +13,25 @@ void createDir(Tree &node, std::vector<std::string> &paths) {
         Tree *child = nullptr;
         node.get_child(*currentPath, child);
 
+        int pathSize = paths.size();
         paths.erase(paths.begin(), paths.begin() + 1);
+//        Check if node with the name exists
         if (child != nullptr) {
+//            Dont create a new directory if file with same name is present
             if (child->nodeType == File) {
                 std::cout << "Invalid: Cannot create " << paths.back() << " under the File " << child->name
                           << std::endl;
                 paths.erase(paths.begin(), paths.end());
                 return;
             }
-            if (paths.size() == 0) {
+//            Override directory if folder with the same name is present
+            if (pathSize == 0) {
                 *child = newNode;
                 return;
             }
             createDir(*child, paths);
         } else {
+//            If no node is present create directory recursively
             std::cout << newNode.name << " DIRECTORY created" << std::endl;
             createDir(newNode, paths);
             node.addTree(newNode);
@@ -132,7 +137,6 @@ bool pathBetween(std::string first, std::string second, Tree root, std::vector<s
             }
         }
     }
-
 
     return false;
 }

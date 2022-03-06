@@ -15,6 +15,13 @@
 //InmemoryFileSystem is a class that implements the file system interface
 class InmemoryFileSystem : public FileSystemInterface {
     Tree root;
+
+    void createDir(Tree &node, std::vector<std::string> &paths);
+
+    void createFile(Tree &node, std::vector<std::string> &paths);
+
+    bool pathBetween(std::string first, std::string second, Tree root, std::vector<std::string> &path);
+
 public:
 
     InmemoryFileSystem() : root(Tree("", DIRECTORY)) {}
