@@ -1,7 +1,7 @@
 # Virtual File System
 
 [![Build Status](https://github.com/h0lyalg0rithm/vfs/actions/workflows/build.yaml/badge.svg?branch=master)](https://github.com/h0lyalg0rithm/vfs/actions/workflows/build.yaml)
-[![GitHub release](https://img.shields.io/github/release/h0lyalg0rithm/vfs.svg)](https://github.com/h0lyalg0rithm/vfs/releases)
+[![GitHub release](https://img.shields.io/github/v/release/h0lyalg0rithm/vfs?display_name=tag)](https://github.com/h0lyalg0rithm/vfs/releases)
 
 The _vfs_ is a solution to the technical assignment.
 
