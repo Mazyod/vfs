@@ -10,6 +10,8 @@
 #include<string>
 #include<vector>
 #include<iostream>
+#include<optional>
+#include <functional>
 
 //Internal implementation of the tree backend file system
 class Tree {
@@ -21,60 +23,6 @@ public:
     Tree(std::string name, NodeType nodeType) {
         this->name = name;
         this->nodeType = nodeType;
-    }
-
-    void create_dir(std::vector<std::string> *paths) {
-        while (!paths->empty()) {
-            auto currentPath = paths->begin();
-            Tree treeNode(*currentPath, DIRECTORY);
-            auto child = std::find_if(this->children.begin(), this->children.end(),
-                                      [&currentPath](Tree c) { return c.name == *currentPath; });
-
-            paths->erase(paths->begin(), paths->begin() + 1);
-            if (child == this->children.end()) {
-                std::cout << treeNode.name << " DIRECTORY created" << std::endl;
-                treeNode.create_dir(paths);
-                this->children.push_back(treeNode);
-            } else {
-                if (child->nodeType == File) {
-                    std::cout << "Invalid: Cannot create " << paths->back() << " under the File " << child->name
-                              << std::endl;
-                    paths->erase(paths->begin(), paths->end());
-                    return;
-                }
-                (*child).create_dir(paths);
-            }
-        }
-    }
-
-    void create_file(std::vector<std::string> *paths) {
-        while (!paths->empty()) {
-            auto currentPath = paths->begin();
-            Tree treeNode(*currentPath, File);
-            auto child = std::find_if(this->children.begin(), this->children.end(),
-                                      [&currentPath](Tree c) { return c.name == *currentPath; });
-            if (child != this->children.end()) {
-                if (child->nodeType == File) {
-                    std::cout << "Cannot create File " << paths->back() << " under the File " << *currentPath
-                              << std::endl;
-                    return;
-                } else {
-                    if (paths->size() == 1) {
-                        std::cout << "Cannot create File " << paths->back() << " under the folder with same name "
-                                  << *currentPath << std::endl;
-                        paths->erase(paths->begin(), paths->end());
-                        return;
-                    }
-                    paths->erase(paths->begin(), paths->begin() + 1);
-                    (*child).create_file(paths);
-                }
-            } else if (paths->size() == 1) {
-                std::cout << paths->front() << " has been created" << std::endl;
-                paths->erase(paths->begin(), paths->end());
-                this->children.push_back(treeNode);
-                return;
-            }
-        }
     }
 
     bool find_path(std::string name, Tree root, std::vector<std::string> &path) {
@@ -118,6 +66,28 @@ public:
         return false;
     }
 
+    void get_child(std::string name, Tree*& tree) {
+        tree = NULL;
+        for (Tree &node: this->children) {
+            if (node.name == name) {
+                tree = &node;
+            }
+        }
+    }
+
+    std::optional<Tree> get_child(std::string &name) {
+        for (Tree &node: this->children) {
+            if (node.name == name) {
+                return node;
+            }
+        }
+        return std::nullopt;
+
+    }
+
+    void addTree(Tree &node) {
+        this->children.push_back(node);
+    }
 };
 
 

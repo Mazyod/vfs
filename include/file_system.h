@@ -17,7 +17,7 @@ enum NodeType {
 // Currently InmemoryFileSystem is implemented but if a new file system based on
 class FileSystemInterface {
 public:
-    virtual void addPath(std::string path) = 0;
+    virtual void create_directory(std::string path) = 0;
 
     virtual void touch_file(std::string path) = 0;
 

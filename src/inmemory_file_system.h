@@ -19,7 +19,7 @@ public:
 
     InmemoryFileSystem() : root(Tree("", DIRECTORY)) {}
 
-    void addPath(std::string path);
+    void create_directory(std::string path);
 
     void touch_file(std::string path);
 

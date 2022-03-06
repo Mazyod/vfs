@@ -4,18 +4,91 @@
 
 #include "inmemory_file_system.h"
 
+//Recursively create node based on the path vector
+void createDir(Tree &node, std::vector<std::string> &paths) {
+    while (!paths.empty()) {
+        auto currentPath = paths.begin();
+        Tree newNode(*currentPath, DIRECTORY);
+
+        Tree *child = nullptr;
+        node.get_child(*currentPath, child);
+
+        paths.erase(paths.begin(), paths.begin() + 1);
+        if (child != nullptr) {
+            if (child->nodeType == File) {
+                std::cout << "Invalid: Cannot create " << paths.back() << " under the File " << child->name
+                          << std::endl;
+                paths.erase(paths.begin(), paths.end());
+                return;
+            }
+            if (paths.size() == 0) {
+                *child = newNode;
+                return;
+            }
+            createDir(*child, paths);
+        } else {
+            std::cout << newNode.name << " DIRECTORY created" << std::endl;
+            createDir(newNode, paths);
+            node.addTree(newNode);
+        }
+    }
+}
+
+void createFile(Tree &node, std::vector<std::string> &paths) {
+    while (!paths.empty()) {
+        auto currentPath = paths.begin();
+        Tree newNode(*currentPath, File);
+
+        Tree *child = nullptr;
+        node.get_child(*currentPath, child);
+
+        if (child != nullptr) {
+            if(child->nodeType == File and child->name == *currentPath and paths.size() == 1){
+                *child = newNode;
+                std::cout << *currentPath << " has been created" << std::endl;
+                paths.erase(paths.begin(), paths.end());
+                return;
+            }
+            else if(child->nodeType == File) {
+                std::cout << "Cannot create File " << paths.back() << " under the File " << *currentPath
+                          << std::endl;
+                paths.erase(paths.begin(), paths.end());
+                return;
+            } else {
+                if (paths.size() == 1) {
+                    std::cout << "Cannot create File " << paths.back() << " under the folder with same name "
+                              << *currentPath << std::endl;
+                    paths.erase(paths.begin(), paths.end());
+                    return;
+                }
+                paths.erase(paths.begin(), paths.begin() + 1);
+                createFile(*child, paths);
+            }
+        } else {
+            if (paths.size() == 1) {
+                std::cout << *currentPath << " has been created" << std::endl;
+                node.addTree(newNode);
+            } else {
+                std::cout << "Invalid: " << *currentPath << " does not exist" << std::endl;
+            }
+            paths.erase(paths.begin(), paths.end());
+            return;
+        }
+    }
+}
+
 //Splits the path string into a path vector and creates a new directory
-void InmemoryFileSystem::addPath(std::string path) {
-    std::vector<std::string> pathVector;
-    split(path, pathVector, '/');
-    this->root.create_dir(&pathVector);
+void InmemoryFileSystem::create_directory(std::string path) {
+    std::vector<std::string> paths;
+    split(path, paths, '/');
+    createDir(this->root, paths);
 }
 
 //Splits the path string into a path vector and creates a new file
 void InmemoryFileSystem::touch_file(std::string path) {
-    std::vector<std::string> pathVector;
-    split(path, pathVector, '/');
-    this->root.create_file(&pathVector);
+    std::vector<std::string> paths;
+    split(path, paths, '/');
+    createFile(this->root, paths);
 }
 
 //Finds the path from the root to file
