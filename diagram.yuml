@@ -1,0 +1,10 @@
+// VFS Diagram
+// -------------------
+
+
+[main]->[Application]
+[Application]-[CommandLineParser]-[Operation]
+[Operation]->[CreateDirectory]->[FileSystem]
+[Operation]->[TouchFile]->[FileSystem]
+[Operation]->[FindFileDirectory]->[FileSystem]
+[FileSystem]->[Tree]

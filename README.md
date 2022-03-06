@@ -24,3 +24,9 @@ chmod +x build.sh
 ./build.sh
 ./app
 ```
+
+## Architecture
+The goal is to ensure the communication flow is in one direction.All class follow the SRP principle.
+Interfaces are used to define the boundaries between the different entities.
+
+![](diagram.jpg)
