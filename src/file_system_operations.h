@@ -6,18 +6,25 @@
 #define VFS_FILE_SYSTEM_OPERATIONS_H
 
 #include "commandline_parser.h"
-#include "tree_file_system.h"
+#include "inmemory_file_system.h"
 
 #define OPERATION_SUCCESSFUL 0
 #define OPERATION_EXIT 1
 
+//Operation is an interface which defines the commands which can be implemented
 class Operation {
+protected:
+//    Validate the command passed in
+    virtual bool validate(ParsedCommand command) = 0;
+
 public:
+//    Execute a given command on a file system
     virtual int execute(ParsedCommand parsedCommand, FileSystemInterface *file_system) = 0;
 };
 
+//Operation to create a new directory
 class MakeDirectoryOperation : public Operation {
-    bool validate(ParsedCommand command) const {
+    bool validate(ParsedCommand command) {
         return command.command == "mkdir" and command.args.size() == 1;
     }
 
@@ -25,8 +32,9 @@ public:
     int execute(ParsedCommand parsedCommand, FileSystemInterface *file_system) override;
 };
 
+//Operation to create a new file
 class TouchFileOperation : public Operation {
-    bool validate(ParsedCommand command) const {
+    bool validate(ParsedCommand command) {
         return command.command == "touch" and command.args.size() == 1;
     }
 
@@ -34,9 +42,9 @@ public:
     int execute(ParsedCommand parsedCommand, FileSystemInterface *file_system) override;
 };
 
+//Find a file or directory operation
 class FindFileDirectoryOperation : public Operation {
-
-    bool validate(ParsedCommand command) const {
+    bool validate(ParsedCommand command) {
         return command.command == "find" and (command.args.size() >= 1 or command.args.size() <= 2);
     }
 
@@ -44,6 +52,7 @@ public:
     int execute(ParsedCommand parsedCommand, FileSystemInterface *file_system) override;
 };
 
+//Exit the program operation
 class ExitOperation : public Operation {
 public:
     int execute(ParsedCommand parsedCommand, FileSystemInterface *file_system) override {
@@ -51,6 +60,7 @@ public:
     }
 };
 
+//Invalid operation if the operation is not valid
 class InvalidOperation : public Operation {
 public:
     int execute(ParsedCommand parsedCommand, FileSystemInterface *file_system) override {

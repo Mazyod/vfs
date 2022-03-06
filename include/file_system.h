@@ -12,6 +12,7 @@ enum NodeType {
 };
 
 //Define the operations a file system should implement
+// Currently InmemoryFileSystem is implemented but if a new file system based on
 class FileSystemInterface {
 public:
     virtual void addPath(std::string path) = 0;

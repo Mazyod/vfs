@@ -23,7 +23,7 @@ void Application::setOperation(ParsedCommand parsedCommand) {
     }
 }
 
-//Run the application
+//Run the application and read commands from the user
 void Application::run() {
     std::string commandString;
     CommandlineParser commandParser;

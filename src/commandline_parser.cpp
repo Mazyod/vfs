@@ -3,8 +3,9 @@
 //
 
 #include "commandline_parser.h"
+
 //Parses a string into a ParsedCommand struct
-// "
+// "make 1/2/3" => ParsedCommand(std::string("mkdir"), std::vector<string>("1/2/3"))
 ParsedCommand CommandlineParser::parseString(std::string line) {
     ParsedCommand command;
     std::string trimmedLine = trim(line);

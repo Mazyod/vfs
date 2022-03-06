@@ -2,8 +2,8 @@
 // Created by suraj on 3/6/22.
 //
 
-#ifndef VFS_TREE_FILE_SYSTEM_H
-#define VFS_TREE_FILE_SYSTEM_H
+#ifndef VFS_INMEMORY_FILE_SYSTEM_H
+#define VFS_INMEMORY_FILE_SYSTEM_H
 
 #include<string>
 #include<vector>
@@ -121,12 +121,12 @@ public:
 
 };
 
-
-class TreeFileSystem : public FileSystemInterface {
+//InmemoryFileSystem is a class that implements the file system interface
+class InmemoryFileSystem : public FileSystemInterface {
     Tree root;
 public:
 
-    TreeFileSystem() : root(Tree("", DIRECTORY)) {}
+    InmemoryFileSystem() : root(Tree("", DIRECTORY)) {}
 
     void addPath(std::string path);
 
@@ -139,4 +139,4 @@ public:
 };
 
 
-#endif //VFS_TREE_FILE_SYSTEM_H
+#endif //VFS_INMEMORY_FILE_SYSTEM_H
