@@ -3,4 +3,4 @@ project(vfs)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(vfs main.cpp)
+add_executable(vfs main.cpp include/strings.h)
