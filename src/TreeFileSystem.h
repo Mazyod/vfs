@@ -9,22 +9,8 @@
 #include<vector>
 #include<iostream>
 #include "../include/strings.h"
+#include "../include/file_system.h"
 
-enum NodeType {
-    file,
-    directory
-};
-
-class FileSystemInterface {
-public:
-    virtual void addPath(std::string path) {}
-
-    virtual void touch_file(std::string path) {}
-
-    virtual void find_path(std::string path) {}
-
-    virtual void find_between_path(std::string first, std::string second) {}
-};
 
 class TreeNode {
 public:
@@ -40,18 +26,18 @@ public:
     void create_dir(std::vector<std::string> *paths) {
         while (!paths->empty()) {
             auto currentPath = paths->begin();
-            TreeNode treeNode(*currentPath, directory);
+            TreeNode treeNode(*currentPath, DIRECTORY);
             auto child = std::find_if(this->children.begin(), this->children.end(),
                                       [&currentPath](TreeNode c) { return c.name == *currentPath; });
 
             paths->erase(paths->begin(), paths->begin() + 1);
             if (child == this->children.end()) {
-                std::cout << treeNode.name << " directory created" << std::endl;
+                std::cout << treeNode.name << " DIRECTORY created" << std::endl;
                 treeNode.create_dir(paths);
                 this->children.push_back(treeNode);
             } else {
-                if (child->nodeType == file) {
-                    std::cout << "Invalid: Cannot create " << paths->back() << " under the file " << child->name
+                if (child->nodeType == File) {
+                    std::cout << "Invalid: Cannot create " << paths->back() << " under the File " << child->name
                               << std::endl;
                     paths->erase(paths->begin(), paths->end());
                     return;
@@ -64,17 +50,17 @@ public:
     void create_file(std::vector<std::string> *paths) {
         while (!paths->empty()) {
             auto currentPath = paths->begin();
-            TreeNode treeNode(*currentPath, file);
+            TreeNode treeNode(*currentPath, File);
             auto child = std::find_if(this->children.begin(), this->children.end(),
                                       [&currentPath](TreeNode c) { return c.name == *currentPath; });
             if (child != this->children.end()) {
-                if (child->nodeType == file) {
-                    std::cout << "Cannot create file " << paths->back() << " under the file " << *currentPath
+                if (child->nodeType == File) {
+                    std::cout << "Cannot create File " << paths->back() << " under the File " << *currentPath
                               << std::endl;
                     return;
                 } else {
                     if (paths->size() == 1) {
-                        std::cout << "Cannot create file " << paths->back() << " under the folder with same name "
+                        std::cout << "Cannot create File " << paths->back() << " under the folder with same name "
                                   << *currentPath << std::endl;
                         paths->erase(paths->begin(), paths->end());
                         return;
@@ -139,7 +125,7 @@ class TreeFileSystem : public FileSystemInterface {
     TreeNode root;
 public:
 
-    TreeFileSystem() : root(TreeNode("", directory)) {}
+    TreeFileSystem() : root(TreeNode("", DIRECTORY)) {}
 
     void addPath(std::string path);
 

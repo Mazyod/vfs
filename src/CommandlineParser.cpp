@@ -3,7 +3,8 @@
 //
 
 #include "CommandlineParser.h"
-
+//Parses a string into a ParsedCommand struct
+// "
 ParsedCommand CommandlineParser::parseString(std::string line) {
     ParsedCommand command;
     std::string trimmedLine = trim(line);
