@@ -43,13 +43,12 @@ void createFile(Tree &node, std::vector<std::string> &paths) {
         node.get_child(*currentPath, child);
 
         if (child != nullptr) {
-            if(child->nodeType == File and child->name == *currentPath and paths.size() == 1){
+            if (child->nodeType == File and child->name == *currentPath and paths.size() == 1) {
                 *child = newNode;
                 std::cout << *currentPath << " has been created" << std::endl;
                 paths.erase(paths.begin(), paths.end());
                 return;
-            }
-            else if(child->nodeType == File) {
+            } else if (child->nodeType == File) {
                 std::cout << "Cannot create File " << paths.back() << " under the File " << *currentPath
                           << std::endl;
                 paths.erase(paths.begin(), paths.end());
@@ -97,7 +96,7 @@ void InmemoryFileSystem::find_path(std::string path) {
     split(path, pathVector, '/');
     std::vector<std::string> pathV;
     auto destination = pathVector.back();
-    this->root.find_path(destination, this->root, pathV);
+    this->root.find_path(destination, pathV);
     if (pathV.empty()) {
         std::cout << destination << " cannot be found" << std::endl;
     } else {
@@ -112,10 +111,36 @@ void InmemoryFileSystem::find_path(std::string path) {
     }
 }
 
+bool pathBetween(std::string first, std::string second, Tree root, std::vector<std::string> &path) {
+    std::vector<std::string> pathFirst;
+    bool foundFirst = root.find_path(first, pathFirst);
+    if (!foundFirst) return false;
+
+    std::vector<std::string> pathSecond;
+    auto child = std::find_if(root.children.begin(), root.children.end(),
+                              [&pathFirst](Tree c) { return c.name == pathFirst.back(); });
+    bool foundSecond = child->find_path(second, pathSecond);
+    if (!foundSecond) return false;
+
+
+    for (auto f = pathFirst.begin(); f != pathFirst.end(); f++) {
+        for (auto p = pathSecond.rbegin(); p != pathSecond.rend(); p++) {
+            if (*f == *p) {
+                path.insert(path.end(), pathFirst.begin(), f);
+                path.insert(path.end(), p, pathSecond.rend());
+                return true;
+            }
+        }
+    }
+
+
+    return false;
+}
+
 //Finds the path from the file1 to file2
 void InmemoryFileSystem::find_between_path(std::string first, std::string second) {
     std::vector<std::string> pathV;
-    this->root.path_between(first, second, this->root, pathV);
+    pathBetween(first, second, this->root, pathV);
     if (pathV.empty()) {
         std::cout << "No path can be found between " << first << " and " << second << std::endl;
     } else {
