@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "include/strings.h"
+#include "src/CommandParser.cpp"
 
 enum NodeType {
     file,
@@ -178,24 +178,7 @@ public:
     }
 };
 
-struct ParsedCommand {
-    std::string command;
-    std::vector<std::string> args;
-};
 
-class CommandParser {
-public:
-    ParsedCommand parseString(std::string line) {
-        struct ParsedCommand command;
-        std::string trimmedLine = trim(line);
-        std::vector<std::string> splits;
-        split(trimmedLine, splits, ' ');
-        command.command = splits.at(0);
-        splits.erase(splits.begin());
-        command.args = splits;
-        return command;
-    }
-};
 
 bool validate_mkdir(ParsedCommand basicString);
 
