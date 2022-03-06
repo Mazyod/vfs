@@ -12,13 +12,14 @@
 #include "../include/file_system.h"
 
 
-class TreeNode {
+//Internal implementation of the tree backend file system
+class Tree {
 public:
     std::string name;
     NodeType nodeType;
-    std::vector<TreeNode> children;
+    std::vector<Tree> children;
 
-    TreeNode(std::string name, NodeType nodeType) {
+    Tree(std::string name, NodeType nodeType) {
         this->name = name;
         this->nodeType = nodeType;
     }
@@ -26,9 +27,9 @@ public:
     void create_dir(std::vector<std::string> *paths) {
         while (!paths->empty()) {
             auto currentPath = paths->begin();
-            TreeNode treeNode(*currentPath, DIRECTORY);
+            Tree treeNode(*currentPath, DIRECTORY);
             auto child = std::find_if(this->children.begin(), this->children.end(),
-                                      [&currentPath](TreeNode c) { return c.name == *currentPath; });
+                                      [&currentPath](Tree c) { return c.name == *currentPath; });
 
             paths->erase(paths->begin(), paths->begin() + 1);
             if (child == this->children.end()) {
@@ -50,9 +51,9 @@ public:
     void create_file(std::vector<std::string> *paths) {
         while (!paths->empty()) {
             auto currentPath = paths->begin();
-            TreeNode treeNode(*currentPath, File);
+            Tree treeNode(*currentPath, File);
             auto child = std::find_if(this->children.begin(), this->children.end(),
-                                      [&currentPath](TreeNode c) { return c.name == *currentPath; });
+                                      [&currentPath](Tree c) { return c.name == *currentPath; });
             if (child != this->children.end()) {
                 if (child->nodeType == File) {
                     std::cout << "Cannot create File " << paths->back() << " under the File " << *currentPath
@@ -77,11 +78,11 @@ public:
         }
     }
 
-    bool find_path(std::string name, TreeNode root, std::vector<std::string> &path) {
+    bool find_path(std::string name, Tree root, std::vector<std::string> &path) {
         if (name == root.name) {
             return true;
         }
-        for (TreeNode child: root.children) {
+        for (Tree child: root.children) {
             bool found = find_path(name, child, path);
             if (found) {
                 path.push_back(child.name);
@@ -92,14 +93,14 @@ public:
         return !path.empty();
     }
 
-    bool path_between(std::string first, std::string second, TreeNode root, std::vector<std::string> &path) {
+    bool path_between(std::string first, std::string second, Tree root, std::vector<std::string> &path) {
         std::vector<std::string> pathFirst;
         bool foundFirst = find_path(first, root, pathFirst);
         if (!foundFirst) return false;
 
         std::vector<std::string> pathSecond;
         auto child = std::find_if(root.children.begin(), root.children.end(),
-                                  [&pathFirst](TreeNode c) { return c.name == pathFirst.back(); });
+                                  [&pathFirst](Tree c) { return c.name == pathFirst.back(); });
         bool foundSecond = find_path(second, *child, pathSecond);
         if (!foundSecond) return false;
 
@@ -122,10 +123,10 @@ public:
 
 
 class TreeFileSystem : public FileSystemInterface {
-    TreeNode root;
+    Tree root;
 public:
 
-    TreeFileSystem() : root(TreeNode("", DIRECTORY)) {}
+    TreeFileSystem() : root(Tree("", DIRECTORY)) {}
 
     void addPath(std::string path);
 
