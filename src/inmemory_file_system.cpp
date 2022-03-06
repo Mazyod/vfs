@@ -3,7 +3,7 @@
 //
 
 #include "inmemory_file_system.h"
-
+#include <algorithm>
 
 //Splits the path string into a path vector and creates a new directory
 void InmemoryFileSystem::create_directory(std::string path) {

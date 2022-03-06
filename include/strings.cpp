@@ -1,5 +1,6 @@
 
 #include "strings.h"
+#include <algorithm>
 
 std::string ltrim(std::string s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(),
