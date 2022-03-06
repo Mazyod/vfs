@@ -4,19 +4,19 @@
 
 #include "FileSystem.h"
 
-void Tree::addPath(std::string path) {
+void FileSystem::addPath(std::string path) {
     std::vector<std::string> pathVector;
     split(path, pathVector, '/');
     this->root.create_dir(&pathVector);
 }
 
-void Tree::touch_file(std::string path) {
+void FileSystem::touch_file(std::string path) {
     std::vector<std::string> pathVector;
     split(path, pathVector, '/');
     this->root.create_file(&pathVector);
 }
 
-void Tree::find_path(std::string path) {
+void FileSystem::find_path(std::string path) {
     std::vector<std::string> pathVector;
     split(path, pathVector, '/');
     std::vector<std::string> pathV;
@@ -36,7 +36,7 @@ void Tree::find_path(std::string path) {
     }
 }
 
-void Tree::find_between_path(std::string first, std::string second) {
+void FileSystem::find_between_path(std::string first, std::string second) {
     std::vector<std::string> pathV;
     this->root.path_between(first, second, this->root, pathV);
     if (pathV.empty()) {

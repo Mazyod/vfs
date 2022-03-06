@@ -2,10 +2,10 @@
 // Created by suraj on 3/6/22.
 //
 
-#include "CommandParser.h"
+#include "CommandlineParser.h"
 
-ParsedCommand CommandParser::parseString(std::string line) {
-    struct ParsedCommand command;
+ParsedCommand CommandlineParser::parseString(std::string line) {
+    ParsedCommand command;
     std::string trimmedLine = trim(line);
     std::vector<std::string> splits;
     split(trimmedLine, splits, ' ');

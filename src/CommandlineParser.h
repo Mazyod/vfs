@@ -1,8 +1,8 @@
 //
 // Created by suraj on 3/6/22.
 //
-#ifndef VFS_COMMANDPARSER_H
-#define VFS_COMMANDPARSER_H
+#ifndef VFS_COMMANDLINEPARSER_H
+#define VFS_COMMANDLINEPARSER_H
 
 
 #include "../include/strings.h"
@@ -14,14 +14,14 @@ struct ParsedCommand {
     std::vector<std::string> args;
 };
 
-class CommandParserInterface {
+class StringParser {
 public:
-    virtual ParsedCommand parseString(std::string line) {}
+    virtual ParsedCommand parseString(std::string line) = 0;
 };
 
-class CommandParser : public CommandParserInterface {
+class CommandlineParser : public StringParser {
 public:
     ParsedCommand parseString(std::string line);
 };
 
-#endif //VFS_COMMANDPARSER_H
+#endif //VFS_COMMANDLINEPARSER_H

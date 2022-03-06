@@ -16,6 +16,7 @@ enum NodeType {
 };
 
 class FileSystemInterface {
+public:
     virtual void addPath(std::string path) {}
 
     virtual void touch_file(std::string path) {}
@@ -138,13 +139,11 @@ public:
 };
 
 
-class Tree : public FileSystemInterface {
-public:
+class FileSystem : public FileSystemInterface {
     TreeNode root;
+public:
 
-    Tree(TreeNode root) : root(root) {
-        this->root = root;
-    }
+    FileSystem() : root(TreeNode("", directory)) {}
 
     void addPath(std::string path);
 
