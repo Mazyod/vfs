@@ -8,8 +8,8 @@
 #include "commandline_parser.h"
 #include "tree_file_system.h"
 
-#define OPERATION_SUCCESSFUL 0;
-#define OPERATION_EXIT 1;
+#define OPERATION_SUCCESSFUL 0
+#define OPERATION_EXIT 1
 
 class Operation {
 public:

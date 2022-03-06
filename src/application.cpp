@@ -3,6 +3,7 @@
 //
 #include "application.h"
 
+//Set the operation from a parsedCommand into an Operation
 void Application::setOperation(ParsedCommand parsedCommand) {
     if (parsedCommand.command == "mkdir") {
         MakeDirectoryOperation makeDirectory;
@@ -22,6 +23,7 @@ void Application::setOperation(ParsedCommand parsedCommand) {
     }
 }
 
+//Run the application
 void Application::run() {
     std::string commandString;
     CommandlineParser commandParser;
@@ -34,6 +36,6 @@ void Application::run() {
         auto parsedCommand = commandParser.parseString(commandString);
         setOperation(parsedCommand);
         running = operation->execute(parsedCommand, file_system);
-    } while (running == 0);
+    } while (running == OPERATION_SUCCESSFUL);
 };
 
