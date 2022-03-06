@@ -4,18 +4,21 @@
 
 #include "inmemory_file_system.h"
 
+//Splits the path string into a path vector and creates a new directory
 void InmemoryFileSystem::addPath(std::string path) {
     std::vector<std::string> pathVector;
     split(path, pathVector, '/');
     this->root.create_dir(&pathVector);
 }
 
+//Splits the path string into a path vector and creates a new file
 void InmemoryFileSystem::touch_file(std::string path) {
     std::vector<std::string> pathVector;
     split(path, pathVector, '/');
     this->root.create_file(&pathVector);
 }
 
+//Finds the path from the root to file
 void InmemoryFileSystem::find_path(std::string path) {
     std::vector<std::string> pathVector;
     split(path, pathVector, '/');
@@ -36,6 +39,7 @@ void InmemoryFileSystem::find_path(std::string path) {
     }
 }
 
+//Finds the path from the file1 to file2
 void InmemoryFileSystem::find_between_path(std::string first, std::string second) {
     std::vector<std::string> pathV;
     this->root.path_between(first, second, this->root, pathV);

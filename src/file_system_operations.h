@@ -54,6 +54,8 @@ public:
 
 //Exit the program operation
 class ExitOperation : public Operation {
+    bool validate(ParsedCommand command) { return command.command == "exit"; }
+
 public:
     int execute(ParsedCommand parsedCommand, FileSystemInterface *file_system) override {
         return OPERATION_EXIT;
@@ -62,6 +64,8 @@ public:
 
 //Invalid operation if the operation is not valid
 class InvalidOperation : public Operation {
+    bool validate(ParsedCommand command) { return true; }
+
 public:
     int execute(ParsedCommand parsedCommand, FileSystemInterface *file_system) override {
         std::cout << "Invalid Command: " << parsedCommand.command << std::endl;

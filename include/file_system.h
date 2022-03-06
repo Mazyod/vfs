@@ -4,8 +4,10 @@
 
 #ifndef VFS_FILE_SYSTEM_H
 #define VFS_FILE_SYSTEM_H
-//File and Directory Nodes
 
+#include<string>
+
+//File and Directory Nodes
 enum NodeType {
     File,
     DIRECTORY
