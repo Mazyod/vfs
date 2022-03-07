@@ -15,6 +15,7 @@ class Application {
 
     void setOperation(ParsedCommand parsedCommand);
 
+
 public:
 //    Construct an application injecting a file system
     Application(FileSystemInterface &file_system) {

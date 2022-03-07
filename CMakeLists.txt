@@ -19,9 +19,10 @@ if (test)
 
     enable_testing()
 
-    add_executable( app_test test/strings_test.cpp)
+    add_executable( app_test test/strings_test.cpp test/application_test.cpp)
     target_link_libraries(
             app_test
+            gmock_main
             gtest_main
     )
 
